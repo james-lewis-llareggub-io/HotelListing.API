@@ -20,6 +20,8 @@ builder.Services.AddCors(options =>
     );
 });
 
+builder.Services.AddAutoMapper(typeof(AutoMapperConfiguration));
+    
 builder.Host.UseSerilog((context, configuration) =>
 {
     configuration

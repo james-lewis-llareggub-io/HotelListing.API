@@ -5,10 +5,13 @@ namespace HotelListing.API.Controllers
     public class CountriesController : ControllerBase
     {
         private readonly HotelListingDbContext _context;
+        
+        private readonly IMapper _mapper;
 
-        public CountriesController(HotelListingDbContext context)
+        public CountriesController(HotelListingDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Countries
@@ -81,13 +84,8 @@ namespace HotelListing.API.Controllers
               return Problem("Entity set 'HotelListingDbContext.Countries'  is null.");
           }
 
-          var country = new Country()
-          {
-              Name = dto.Name,
-              ShortName = dto.ShortName
-          };
-          
-            _context.Countries.Add(country);
+          var country = _mapper.Map<Country>(dto);
+          _context.Countries.Add(country);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCountry", new { id = country.Id }, country);
