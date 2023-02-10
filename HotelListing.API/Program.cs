@@ -7,10 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 var connectionString = builder.Configuration.GetConnectionString("HotelListingDbConnectionString");
-builder.Services.AddDbContext<HotelListingDbContext>(options =>
-{
-    options.UseSqlServer(connectionString);
-});
+builder.Services.AddDbContext<HotelListingDbContext>(options => { options.UseSqlServer(connectionString); });
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -31,7 +28,7 @@ builder.Host.UseSerilog((context, configuration) =>
         .WriteTo.Console()
         .ReadFrom.Configuration(context.Configuration);
 });
-    
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
