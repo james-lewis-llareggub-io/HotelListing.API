@@ -74,12 +74,19 @@ namespace HotelListing.API.Controllers
         // POST: api/Countries
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Country>> PostCountry(Country country)
+        public async Task<ActionResult<Country>> PostCountry(CreateCountryDTO dto)
         {
           if (_context.Countries == null)
           {
               return Problem("Entity set 'HotelListingDbContext.Countries'  is null.");
           }
+
+          var country = new Country()
+          {
+              Name = dto.Name,
+              ShortName = dto.ShortName
+          };
+          
             _context.Countries.Add(country);
             await _context.SaveChangesAsync();
 
