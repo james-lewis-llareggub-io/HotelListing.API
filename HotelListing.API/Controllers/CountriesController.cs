@@ -1,7 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using HotelListing.API.Data;
-
 namespace HotelListing.API.Controllers
 {
     [Route("api/[controller]")]
