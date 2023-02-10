@@ -16,13 +16,16 @@ namespace HotelListing.API.Controllers
 
         // GET: api/Countries
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Country>>> GetCountries()
+        public async Task<ActionResult<IEnumerable<GetCountryDTO>>> GetCountries()
         {
           if (_context.Countries == null)
           {
               return NotFound();
           }
-            return await _context.Countries.ToListAsync();
+
+          var countries = await _context.Countries.ToListAsync();
+          var list = _mapper.Map<List<GetCountryDTO>>(countries);
+          return list;
         }
 
         // GET: api/Countries/5

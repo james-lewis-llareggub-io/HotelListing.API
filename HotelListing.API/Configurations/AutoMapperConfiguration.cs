@@ -5,5 +5,6 @@ public class AutoMapperConfiguration : Profile
     public AutoMapperConfiguration()
     {
         CreateMap<Country, CreateCountryDTO>().ReverseMap();
+        CreateMap<Country, GetCountryDTO>().ReverseMap();
     }
 }
