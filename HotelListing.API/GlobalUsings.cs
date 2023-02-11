@@ -7,3 +7,4 @@ global using Microsoft.EntityFrameworkCore;
 
 global using HotelListing.API.Configurations;
 global using HotelListing.API.Models.Country;
+global using HotelListing.API.Models.Hotel;
