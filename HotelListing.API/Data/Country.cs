@@ -1,6 +1,6 @@
 ﻿namespace HotelListing.API.Data;
 
-public class Country
+public class Country : IHaveAnId
 {
     public int Id { get; set; }
 

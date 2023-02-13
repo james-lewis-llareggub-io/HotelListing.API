@@ -9,7 +9,7 @@ namespace HotelListing.API.Models.Country;
 ///     Prevent over posting attacks by removing the Id property.
 ///     Does not impact on data persistence model (entity framework).
 /// </remarks>
-public class UpdateCountryDTO : CreateCountryDTO
+public class UpdateCountryDTO : CreateCountryDTO, IHaveAnId
 {
     [Required] public int Id { get; set; }
 }

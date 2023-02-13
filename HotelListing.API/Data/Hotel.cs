@@ -2,7 +2,7 @@
 
 namespace HotelListing.API.Data;
 
-public class Hotel
+public class Hotel : IHaveAnId
 {
     public int Id { get; set; }
 
