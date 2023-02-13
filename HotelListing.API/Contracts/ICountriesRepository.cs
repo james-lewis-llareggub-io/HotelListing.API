@@ -2,5 +2,4 @@
 
 public interface ICountriesRepository : IRepository<Country>
 {
-    
 }

@@ -3,7 +3,7 @@
 public class Repository<T> : IRepository<T> where T : class
 {
     protected readonly HotelListingDbContext Context;
-    
+
     public Repository(HotelListingDbContext context)
     {
         Context = context;
@@ -25,7 +25,7 @@ public class Repository<T> : IRepository<T> where T : class
         if (entity is not null)
         {
             Context.Set<T>().Remove(entity);
-            await Context.SaveChangesAsync();    
+            await Context.SaveChangesAsync();
         }
     }
 

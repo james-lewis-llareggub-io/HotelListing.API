@@ -9,7 +9,7 @@ public interface IRepository<T> where T : class
     Task DeleteAsync(int id);
 
     Task<T> CreateAsync(T entity);
-    
+
     Task UpdateAsync(T entity);
 
     Task<bool> Exists(int id);

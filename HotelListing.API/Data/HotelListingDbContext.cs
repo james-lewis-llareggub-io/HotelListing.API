@@ -14,19 +14,19 @@ public class HotelListingDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Country>().HasData(
-            new Country()
+            new Country
             {
                 Id = 1,
                 Name = "Jamaica",
                 ShortName = "JM"
             },
-            new Country()
+            new Country
             {
                 Id = 2,
                 Name = "Bahamas",
                 ShortName = "BS"
             },
-            new Country()
+            new Country
             {
                 Id = 3,
                 Name = "Cayman Island",
@@ -35,7 +35,7 @@ public class HotelListingDbContext : DbContext
         );
 
         modelBuilder.Entity<Hotel>().HasData(
-            new Hotel()
+            new Hotel
             {
                 Id = 1,
                 Name = "Sandals Resort and Spa",
@@ -43,7 +43,7 @@ public class HotelListingDbContext : DbContext
                 CountryId = 1,
                 Rating = 4.5
             },
-            new Hotel()
+            new Hotel
             {
                 Id = 2,
                 Name = "Comfort Suites",
@@ -51,7 +51,7 @@ public class HotelListingDbContext : DbContext
                 CountryId = 3,
                 Rating = 4.3
             },
-            new Hotel()
+            new Hotel
             {
                 Id = 3,
                 Name = "Grand Palladium",
