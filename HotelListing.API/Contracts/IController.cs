@@ -1,6 +1,6 @@
 ﻿namespace HotelListing.API.Contracts;
 
-public interface IController<T, TGet, TGetDetail, in TUpdate, in TCreate> 
+public interface IController<T, TGet, TGetDetail, in TUpdate, in TCreate>
     where T : class, IHaveAnId
     where TGet : class
     where TGetDetail : class

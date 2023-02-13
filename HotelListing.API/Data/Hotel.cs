@@ -4,8 +4,6 @@ namespace HotelListing.API.Data;
 
 public class Hotel : IHaveAnId
 {
-    public int Id { get; set; }
-
     public string Name { get; set; }
 
     public string Address { get; set; }
@@ -15,4 +13,5 @@ public class Hotel : IHaveAnId
     [ForeignKey(nameof(CountryId))] public int CountryId { get; set; }
 
     public Country Country { get; set; }
+    public int Id { get; set; }
 }

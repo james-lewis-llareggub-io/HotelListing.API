@@ -3,7 +3,7 @@ namespace HotelListing.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class HotelsController : AbstractController<
-    Hotel, 
+    Hotel,
     GetHotelDTO,
     GetHotelDTO,
     GetHotelDTO,

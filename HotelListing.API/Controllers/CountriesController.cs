@@ -3,8 +3,8 @@ namespace HotelListing.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class CountriesController : AbstractController<
-    Country, 
-    GetCountryDTO, 
+    Country,
+    GetCountryDTO,
     GetCountryDetailDTO,
     UpdateCountryDTO,
     CreateCountryDTO

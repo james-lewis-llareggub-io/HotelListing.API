@@ -1,13 +1,13 @@
 ﻿namespace HotelListing.API.Controllers;
 
-public abstract class AbstractController<T, TGet, TGetDetail, TUpdate, TCreate> : 
-    ControllerBase, 
-    IController<T, TGet, TGetDetail, TUpdate, TCreate> 
-        where T : class, IHaveAnId
-        where TGet : class
-        where TGetDetail : class
-        where TUpdate : class, IHaveAnId
-        where TCreate : class
+public abstract class AbstractController<T, TGet, TGetDetail, TUpdate, TCreate> :
+    ControllerBase,
+    IController<T, TGet, TGetDetail, TUpdate, TCreate>
+    where T : class, IHaveAnId
+    where TGet : class
+    where TGetDetail : class
+    where TUpdate : class, IHaveAnId
+    where TCreate : class
 {
     private readonly IMapper _mapper;
     private readonly IRepository<T> _repository;
@@ -16,27 +16,6 @@ public abstract class AbstractController<T, TGet, TGetDetail, TUpdate, TCreate> 
     {
         _repository = repository;
         _mapper = mapper;
-    }
-
-    private async Task<bool> Exists(int id)
-    {
-        return await _repository.Exists(id);
-    }
-
-    private async Task<NotFoundResult?> Update(T entity, int id)
-    {
-        try
-        {
-            await _repository.UpdateAsync(entity);
-            return null;
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            var exists = await Exists(id);
-            if (!exists)
-                return NotFound();
-            throw;
-        }
     }
 
     // DELETE: api/Countries/5
@@ -88,5 +67,26 @@ public abstract class AbstractController<T, TGet, TGetDetail, TUpdate, TCreate> 
         var entity = _mapper.Map<T>(dto);
         var result = await _repository.CreateAsync(entity);
         return CreatedAtAction("Get", new { id = result.Id }, result);
+    }
+
+    private async Task<bool> Exists(int id)
+    {
+        return await _repository.Exists(id);
+    }
+
+    private async Task<NotFoundResult?> Update(T entity, int id)
+    {
+        try
+        {
+            await _repository.UpdateAsync(entity);
+            return null;
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            var exists = await Exists(id);
+            if (!exists)
+                return NotFound();
+            throw;
+        }
     }
 }
