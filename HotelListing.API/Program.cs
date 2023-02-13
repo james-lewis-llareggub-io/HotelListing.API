@@ -21,7 +21,10 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddAutoMapper(typeof(AutoMapperConfiguration));
-    
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
+
 builder.Host.UseSerilog((context, configuration) =>
 {
     configuration

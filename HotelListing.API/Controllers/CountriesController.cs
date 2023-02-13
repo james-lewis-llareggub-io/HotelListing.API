@@ -4,13 +4,13 @@ namespace HotelListing.API.Controllers
     [ApiController]
     public class CountriesController : ControllerBase
     {
-        private readonly HotelListingDbContext _context;
+        private readonly ICountriesRepository _repository;
         
         private readonly IMapper _mapper;
 
-        public CountriesController(HotelListingDbContext context, IMapper mapper)
+        public CountriesController(ICountriesRepository repository, IMapper mapper)
         {
-            _context = context;
+            _repository = repository;
             _mapper = mapper;
         }
 
@@ -18,35 +18,21 @@ namespace HotelListing.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetCountryDTO>>> GetCountries()
         {
-          if (_context.Countries == null)
-          {
-              return NotFound();
-          }
-
-          var countries = await _context.Countries.ToListAsync();
-          var list = _mapper.Map<List<GetCountryDTO>>(countries);
-          return list;
+            var countries = await _repository.GetAllAsync();
+            var list = _mapper.Map<List<GetCountryDTO>>(countries);
+            return list;
         }
 
         // GET: api/Countries/5
         [HttpGet("{id}")]
         public async Task<ActionResult<GetCountryDetailDTO>> GetCountry(int id)
         {
-          if (_context.Countries == null)
-          {
-              return NotFound();
-          }
-
-          var country = await _context.Countries
-              .Include(x => x.Hotels)
-              .FirstOrDefaultAsync(x => x.Id == id);
-          
-            var dto = _mapper.Map<GetCountryDetailDTO>(country);
+            var country = await _repository.GetAsync(id);
             if (country == null)
             {
                 return NotFound();
             }
-
+            var dto = _mapper.Map<GetCountryDetailDTO>(country);
             return Ok(dto);
         }
 
@@ -61,15 +47,14 @@ namespace HotelListing.API.Controllers
             }
 
             var country = _mapper.Map<Country>(dto);
-            _context.Entry(country).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _repository.UpdateAsync(country);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CountryExists(id))
+                var exists = await CountryExists(id);
+                if (!exists)
                 {
                     return NotFound();
                 }
@@ -87,41 +72,22 @@ namespace HotelListing.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Country>> PostCountry(CreateCountryDTO dto)
         {
-          if (_context.Countries == null)
-          {
-              return Problem("Entity set 'HotelListingDbContext.Countries'  is null.");
-          }
-
           var country = _mapper.Map<Country>(dto);
-          _context.Countries.Add(country);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCountry", new { id = country.Id }, country);
+          var result = await _repository.CreateAsync(country);
+          return CreatedAtAction("GetCountry", new { id = result.Id }, result);
         }
 
         // DELETE: api/Countries/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCountry(int id)
         {
-            if (_context.Countries == null)
-            {
-                return NotFound();
-            }
-            var country = await _context.Countries.FindAsync(id);
-            if (country == null)
-            {
-                return NotFound();
-            }
-
-            _context.Countries.Remove(country);
-            await _context.SaveChangesAsync();
-
+            await _repository.DeleteAsync(id);
             return NoContent();
         }
 
-        private bool CountryExists(int id)
+        private async Task<bool> CountryExists(int id)
         {
-            return (_context.Countries?.Any(e => e.Id == id)).GetValueOrDefault();
+            return await _repository.Exists(id);
         }
     }
 }
