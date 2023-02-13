@@ -8,18 +8,18 @@ public interface IController<T, TGet, TGetDetail, in TUpdate, in TCreate>
     where TCreate : class
 {
     // GET: api/Countries
-    Task<ActionResult<IEnumerable<TGet>>> Get();
+    Task<ActionResult<IEnumerable<TGet>>> GetAll();
 
     // GET: api/Countries/5
     Task<ActionResult<TGetDetail>> Get(int id);
 
-    // PUT: api/Countries/5
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    Task<IActionResult> Put(int id, TUpdate dto);
-
     // POST: api/Countries
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     Task<ActionResult<TGet>> Post(TCreate dto);
+
+    // PUT: api/Countries/5
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    Task<IActionResult> Put(int id, TUpdate dto);
 
     // DELETE: api/Countries/5
     Task<IActionResult> Delete(int id);

@@ -18,18 +18,9 @@ public abstract class AbstractController<T, TGet, TGetDetail, TUpdate, TCreate> 
         _mapper = mapper;
     }
 
-    // DELETE: api/Countries/5
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
-    {
-        await _repository.DeleteAsync(id);
-        return NoContent();
-    }
-
-
     // GET: api/Countries
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TGet>>> Get()
+    public async Task<ActionResult<IEnumerable<TGet>>> GetAll()
     {
         var entities = await _repository.GetAllAsync();
         var list = _mapper.Map<List<TGet>>(entities);
@@ -46,6 +37,16 @@ public abstract class AbstractController<T, TGet, TGetDetail, TUpdate, TCreate> 
         return Ok(dto);
     }
 
+    // POST: api/Countries
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [HttpPost]
+    public async Task<ActionResult<TGet>> Post(TCreate dto)
+    {
+        var entity = _mapper.Map<T>(dto);
+        var result = await _repository.CreateAsync(entity);
+        return CreatedAtAction("Get", new { id = result.Id }, result);
+    }
+
     // PUT: api/Countries/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
@@ -59,14 +60,12 @@ public abstract class AbstractController<T, TGet, TGetDetail, TUpdate, TCreate> 
         return NoContent();
     }
 
-    // POST: api/Countries
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [HttpPost]
-    public async Task<ActionResult<TGet>> Post(TCreate dto)
+    // DELETE: api/Countries/5
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
     {
-        var entity = _mapper.Map<T>(dto);
-        var result = await _repository.CreateAsync(entity);
-        return CreatedAtAction("Get", new { id = result.Id }, result);
+        await _repository.DeleteAsync(id);
+        return NoContent();
     }
 
     private async Task<bool> Exists(int id)
