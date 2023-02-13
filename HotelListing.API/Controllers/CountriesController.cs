@@ -2,23 +2,18 @@ namespace HotelListing.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CountriesController : ControllerBase
+public class CountriesController : AbstractController<Country>
 {
-    private readonly IMapper _mapper;
-    private readonly ICountriesRepository _repository;
-
-    public CountriesController(ICountriesRepository repository, IMapper mapper)
+    public CountriesController(ICountriesRepository repository, IMapper mapper): base(repository, mapper)
     {
-        _repository = repository;
-        _mapper = mapper;
     }
 
     // GET: api/Countries
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GetCountryDTO>>> GetCountries()
     {
-        var countries = await _repository.GetAllAsync();
-        var list = _mapper.Map<List<GetCountryDTO>>(countries);
+        var countries = await Repository.GetAllAsync();
+        var list = Mapper.Map<List<GetCountryDTO>>(countries);
         return list;
     }
 
@@ -26,9 +21,9 @@ public class CountriesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<GetCountryDetailDTO>> GetCountry(int id)
     {
-        var country = await _repository.GetAsync(id);
+        var country = await Repository.GetAsync(id);
         if (country == null) return NotFound();
-        var dto = _mapper.Map<GetCountryDetailDTO>(country);
+        var dto = Mapper.Map<GetCountryDetailDTO>(country);
         return Ok(dto);
     }
 
@@ -38,19 +33,9 @@ public class CountriesController : ControllerBase
     public async Task<IActionResult> PutCountry(int id, UpdateCountryDTO dto)
     {
         if (id != dto.Id) return BadRequest();
-
-        var country = _mapper.Map<Country>(dto);
-        try
-        {
-            await _repository.UpdateAsync(country);
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            var exists = await CountryExists(id);
-            if (!exists)
-                return NotFound();
-            throw;
-        }
+        var country = Mapper.Map<Country>(dto);
+        var notFound = await Update(country, id);
+        if (notFound != null) return notFound;
 
         return NoContent();
     }
@@ -60,21 +45,8 @@ public class CountriesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Country>> PostCountry(CreateCountryDTO dto)
     {
-        var country = _mapper.Map<Country>(dto);
-        var result = await _repository.CreateAsync(country);
+        var country = Mapper.Map<Country>(dto);
+        var result = await Repository.CreateAsync(country);
         return CreatedAtAction("GetCountry", new { id = result.Id }, result);
-    }
-
-    // DELETE: api/Countries/5
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCountry(int id)
-    {
-        await _repository.DeleteAsync(id);
-        return NoContent();
-    }
-
-    private async Task<bool> CountryExists(int id)
-    {
-        return await _repository.Exists(id);
     }
 }
