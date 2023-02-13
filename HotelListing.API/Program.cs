@@ -24,6 +24,7 @@ builder.Services.AddAutoMapper(typeof(AutoMapperConfiguration));
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
+builder.Services.AddScoped<IHotelsRepository, HotelsRepository>();
 
 builder.Host.UseSerilog((context, configuration) =>
 {
