@@ -4,7 +4,7 @@ namespace HotelListing.API.Controllers;
 [ApiController]
 public class CountriesController : AbstractController<Country>
 {
-    public CountriesController(ICountriesRepository repository, IMapper mapper): base(repository, mapper)
+    public CountriesController(ICountriesRepository repository, IMapper mapper) : base(repository, mapper)
     {
     }
 

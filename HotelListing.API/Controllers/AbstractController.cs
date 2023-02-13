@@ -10,7 +10,7 @@ public abstract class AbstractController<T> : ControllerBase where T : class
         Repository = repository;
         Mapper = mapper;
     }
-    
+
     private async Task<bool> Exists(int id)
     {
         return await Repository.Exists(id);
@@ -31,7 +31,7 @@ public abstract class AbstractController<T> : ControllerBase where T : class
             throw;
         }
     }
-    
+
     // DELETE: api/Countries/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
