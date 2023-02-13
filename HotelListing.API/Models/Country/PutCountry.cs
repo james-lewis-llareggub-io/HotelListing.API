@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace HotelListing.API.Models.Country;
+﻿namespace HotelListing.API.Models.Country;
 
 /// <summary>
 ///     Single Responsibility: Valid Data Transfer
@@ -9,9 +7,7 @@ namespace HotelListing.API.Models.Country;
 ///     Prevent over posting attacks by removing the Id property.
 ///     Does not impact on data persistence model (entity framework).
 /// </remarks>
-public class CreateCountryDTO
+public class PutCountry : PostCountry, IHaveAnId
 {
-    [Required] public string Name { get; set; }
-
-    [Required] public string ShortName { get; set; }
+    [Required] public int Id { get; set; }
 }

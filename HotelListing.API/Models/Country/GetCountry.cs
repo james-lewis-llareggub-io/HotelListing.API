@@ -1,6 +1,6 @@
 ﻿namespace HotelListing.API.Models.Country;
 
-public class GetCountryDTO
+public class GetCountry
 {
     public int Id { get; set; }
 

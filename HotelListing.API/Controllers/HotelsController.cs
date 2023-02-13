@@ -4,10 +4,10 @@ namespace HotelListing.API.Controllers;
 [ApiController]
 public class HotelsController : AbstractController<
     Hotel,
-    GetHotelDTO,
-    GetHotelDTO,
-    GetHotelDTO,
-    CreateHotelDTO
+    GetHotel,
+    GetHotel,
+    GetHotel,
+    PostHotel
 >
 {
     public HotelsController(IHotelsRepository repository, IMapper mapper) : base(repository, mapper)

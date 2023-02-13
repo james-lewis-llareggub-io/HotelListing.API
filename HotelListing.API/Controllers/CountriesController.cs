@@ -4,10 +4,10 @@ namespace HotelListing.API.Controllers;
 [ApiController]
 public class CountriesController : AbstractController<
     Country,
-    GetCountryDTO,
-    GetCountryDetailDTO,
-    UpdateCountryDTO,
-    CreateCountryDTO
+    GetCountry,
+    GetCountryDetail,
+    PutCountry,
+    PostCountry
 >
 {
     public CountriesController(ICountriesRepository repository, IMapper mapper) : base(repository, mapper)

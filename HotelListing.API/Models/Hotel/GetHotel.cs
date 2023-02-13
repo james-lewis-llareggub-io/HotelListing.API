@@ -1,6 +1,6 @@
 ﻿namespace HotelListing.API.Models.Hotel;
 
-public class GetHotelDTO : IHaveAnId
+public class GetHotel : IHaveAnId
 {
     public string Name { get; set; }
 

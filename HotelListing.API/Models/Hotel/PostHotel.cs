@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace HotelListing.API.Models.Hotel;
 
-namespace HotelListing.API.Models.Hotel;
-
-public class CreateHotelDTO
+public class PostHotel
 {
     [Required] public string Name { get; set; }
 
