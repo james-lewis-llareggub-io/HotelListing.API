@@ -18,7 +18,7 @@ public class LoginController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Post([FromBody] PostIdentityUser dto)
     {
-        bool valid = false;
+        var valid = false;
         try
         {
             var user = await _userManager.FindByEmailAsync(dto.Email);
@@ -26,7 +26,7 @@ public class LoginController : ControllerBase
                 valid = await _userManager.CheckPasswordAsync(user, dto.Password);
 
             if (valid)
-                return Ok();            
+                return Ok();
         }
         catch (Exception)
         {
