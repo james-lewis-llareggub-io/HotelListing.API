@@ -19,7 +19,8 @@ public class RegistrationController : ControllerBase
     public async Task<ActionResult> Post([FromBody] PostIdentityUser dto)
     {
         var user = _mapper.Map<IdentityUser>(dto);
-        var result = await _userManager.CreateAsync(user);
+        user.UserName = user.Email;
+        var result = await _userManager.CreateAsync(user, dto.Password);
 
         if (!result.Errors.Any()) return Ok();
 
