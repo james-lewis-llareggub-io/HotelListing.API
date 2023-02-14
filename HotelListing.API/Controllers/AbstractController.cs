@@ -40,6 +40,7 @@ public abstract class AbstractController<T, TGet, TGetDetail, TUpdate, TCreate> 
     // POST: api/Countries
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<TGet>> Post(TCreate dto)
     {
         var entity = _mapper.Map<T>(dto);
@@ -50,6 +51,7 @@ public abstract class AbstractController<T, TGet, TGetDetail, TUpdate, TCreate> 
     // PUT: api/Countries/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
+    [Authorize]
     public async Task<IActionResult> Put(int id, TUpdate dto)
     {
         if (id != dto.Id) return BadRequest();
@@ -62,6 +64,7 @@ public abstract class AbstractController<T, TGet, TGetDetail, TUpdate, TCreate> 
 
     // DELETE: api/Countries/5
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
         await _repository.DeleteAsync(id);

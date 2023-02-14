@@ -11,3 +11,4 @@ global using HotelListing.API.Models.Country;
 global using HotelListing.API.Models.Hotel;
 global using HotelListing.API.Models.User;
 global using HotelListing.API.Repositories;
+global using Microsoft.AspNetCore.Authorization;
