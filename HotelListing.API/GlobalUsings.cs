@@ -9,4 +9,5 @@ global using HotelListing.API.Configurations;
 global using HotelListing.API.Contracts;
 global using HotelListing.API.Models.Country;
 global using HotelListing.API.Models.Hotel;
+global using HotelListing.API.Models.User;
 global using HotelListing.API.Repositories;

@@ -1,4 +1,6 @@
-﻿namespace HotelListing.API.Configurations;
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace HotelListing.API.Configurations;
 
 public class AutoMapperConfiguration : Profile
 {
@@ -10,5 +12,6 @@ public class AutoMapperConfiguration : Profile
         CreateMap<Country, PutCountry>().ReverseMap();
         CreateMap<Hotel, GetHotel>().ReverseMap();
         CreateMap<Hotel, PostHotel>().ReverseMap();
+        CreateMap<IdentityUser, PostIdentityUser>().ReverseMap();
     }
 }
