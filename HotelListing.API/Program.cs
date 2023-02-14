@@ -1,4 +1,5 @@
-using System.Text;
+using HotelListing.API.Contracts.Security;
+using HotelListing.API.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -30,9 +31,17 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddAutoMapper(typeof(AutoMapperConfiguration));
 
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
-builder.Services.AddScoped<IHotelsRepository, HotelsRepository>();
+builder.Services
+    .AddScoped(typeof(IRepository<>), typeof(Repository<>))
+    .AddScoped<ICountriesRepository, CountriesRepository>()
+    .AddScoped<IHotelsRepository, HotelsRepository>()
+    .AddScoped<IClaimsProvider, ClaimsProvider>()
+    .AddScoped<ISigningCredentialsProvider, SigningCredentialsProvider>()
+    .AddScoped<IJwtSecurityTokenProvider, JwtSecurityTokenProvider>()
+    .AddScoped<IJwtSettingsConfiguration, JwtSettingsConfiguration>();
+
+var provider = new SigningCredentialsProvider(builder.Configuration);
+var jwt = new JwtSettingsConfiguration(builder.Configuration);
 
 builder.Services.AddAuthentication(options =>
     {
@@ -48,11 +57,9 @@ builder.Services.AddAuthentication(options =>
             ValidateAudience = true,
             ValidateLifetime = true,
             ClockSkew = TimeSpan.Zero,
-            ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-            ValidAudience = builder.Configuration["JwtSettings:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Secrets:Key"])
-            )
+            ValidIssuer = jwt.Issuer,
+            ValidAudience = jwt.Audience,
+            IssuerSigningKey = provider.GetSymmetricSecurityKey()
         };
     });
 
