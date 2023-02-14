@@ -1,6 +1,10 @@
-﻿namespace HotelListing.API.Models.User;
+﻿using System.ComponentModel;
 
-public class PostIdentityUser : GetIdentityUser
+namespace HotelListing.API.Models.User;
+
+public class PostIdentityUser
 {
-    [Required] public string Password { get; set; }
+    [EmailAddress] [Required] public string Email { get; set; }
+    
+    [PasswordPropertyText] [Required] public string Password { get; set; }
 }
