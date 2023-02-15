@@ -1,5 +1,7 @@
 using HotelListing.API.Contracts.Security;
+using HotelListing.API.Contracts.Security.Refresh;
 using HotelListing.API.Security;
+using HotelListing.API.Security.Refresh;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -14,6 +16,8 @@ builder.Services.AddDbContext<HotelListingDbContext>(options => { options.UseSql
 
 builder.Services.AddIdentityCore<IdentityUser>()
     .AddRoles<IdentityRole>()
+    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>(CreateRefreshToken.LoginProvider)
+    .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<HotelListingDbContext>();
 
 builder.Services.AddControllers();
@@ -38,7 +42,10 @@ builder.Services
     .AddScoped<IClaimsProvider, ClaimsProvider>()
     .AddScoped<ISigningCredentialsProvider, SigningCredentialsProvider>()
     .AddScoped<IJwtSecurityTokenProvider, JwtSecurityTokenProvider>()
-    .AddScoped<IJwtSettingsConfiguration, JwtSettingsConfiguration>();
+    .AddScoped<IJwtSettingsConfiguration, JwtSettingsConfiguration>()
+    .AddScoped<ICreateRefreshToken, CreateRefreshToken>()
+    .AddScoped<IVerifyRefreshToken, VerifyRefreshToken>()
+    .AddScoped<ICreatePostLogin, CreatePostLogin>();
 
 var provider = new SigningCredentialsProvider(builder.Configuration);
 var jwt = new JwtSettingsConfiguration(builder.Configuration);

@@ -1,4 +1,5 @@
 ﻿using HotelListing.API.Contracts.Security;
+using HotelListing.API.Contracts.Security.Refresh;
 using Microsoft.AspNetCore.Identity;
 
 namespace HotelListing.API.Controllers.User;
@@ -7,20 +8,22 @@ namespace HotelListing.API.Controllers.User;
 [ApiController]
 public class LoginController : ControllerBase
 {
-    private readonly IMapper _mapper;
     private readonly IJwtSecurityTokenProvider _provider;
+    private readonly ICreateRefreshToken _createRefreshToken;
+    private readonly ICreatePostLogin _createPostLogin;
     private readonly UserManager<IdentityUser> _userManager;
 
     public LoginController(
-        IMapper mapper,
         UserManager<IdentityUser> userManager,
-        //IClaimsProvider provider
-        IJwtSecurityTokenProvider provider
+        IJwtSecurityTokenProvider provider,
+        ICreateRefreshToken createRefreshToken,
+        ICreatePostLogin createPostLogin
     )
     {
         _userManager = userManager;
         _provider = provider;
-        _mapper = mapper;
+        _createRefreshToken = createRefreshToken;
+        _createPostLogin = createPostLogin;
     }
 
     [HttpPost]
@@ -35,11 +38,7 @@ public class LoginController : ControllerBase
                 valid = await _userManager.CheckPasswordAsync(user, dto.Password);
                 if (valid)
                 {
-                    var token = new PostLogin
-                    {
-                        Token = await _provider.WriteJwtSecurityToken(user),
-                        UserId = user.Id
-                    };
+                    var token = await _createPostLogin.Create(user);
                     return Ok(token);
                 }
             }
