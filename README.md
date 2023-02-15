@@ -1,4 +1,8 @@
-﻿# Entity Framework Migrations
+﻿# Inspiration
+
+based on an udemy course available at https://www.udemy.com/course/ultimate-aspnet-5-web-api-development-guide with a few tweaks along the way
+
+# Entity Framework Migrations
 
 `dotnet-ef migrations add InitialMigration`
 
