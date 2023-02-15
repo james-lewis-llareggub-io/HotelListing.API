@@ -1,6 +1,4 @@
-﻿using HotelListing.API.Contracts.Security;
-using HotelListing.API.Contracts.Security.Refresh;
-using Microsoft.AspNetCore.Identity;
+﻿using HotelListing.API.Contracts.Security.Refresh;
 
 namespace HotelListing.API.Controllers.User;
 
@@ -9,7 +7,7 @@ namespace HotelListing.API.Controllers.User;
 public class RefreshController : ControllerBase
 {
     private readonly IVerifyRefreshToken _verifyRefreshToken;
-    
+
     public RefreshController(
         IVerifyRefreshToken verifyRefreshToken
     )
@@ -23,7 +21,7 @@ public class RefreshController : ControllerBase
         var verified = await _verifyRefreshToken.Verify(dto);
         if (verified != null)
             return Ok(verified);
-                   
+
         return Unauthorized();
     }
 }

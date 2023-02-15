@@ -8,9 +8,9 @@ namespace HotelListing.API.Controllers.User;
 [ApiController]
 public class LoginController : ControllerBase
 {
-    private readonly IJwtSecurityTokenProvider _provider;
-    private readonly ICreateRefreshToken _createRefreshToken;
     private readonly ICreatePostLogin _createPostLogin;
+    private readonly ICreateRefreshToken _createRefreshToken;
+    private readonly IJwtSecurityTokenProvider _provider;
     private readonly UserManager<IdentityUser> _userManager;
 
     public LoginController(

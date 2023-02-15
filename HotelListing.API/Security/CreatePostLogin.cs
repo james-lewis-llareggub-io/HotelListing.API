@@ -6,8 +6,8 @@ namespace HotelListing.API.Security;
 
 public class CreatePostLogin : ICreatePostLogin
 {
-    private readonly IJwtSecurityTokenProvider _provider;
     private readonly ICreateRefreshToken _createRefreshToken;
+    private readonly IJwtSecurityTokenProvider _provider;
 
     public CreatePostLogin(
         IJwtSecurityTokenProvider provider,
@@ -17,7 +17,7 @@ public class CreatePostLogin : ICreatePostLogin
         _provider = provider;
         _createRefreshToken = createRefreshToken;
     }
-    
+
     public async Task<PostLogin> Create(IdentityUser user)
     {
         var token = await _provider.WriteJwtSecurityToken(user);
@@ -26,7 +26,7 @@ public class CreatePostLogin : ICreatePostLogin
         {
             Token = token,
             UserId = user.Id,
-            RefreshToken = refreshToken 
+            RefreshToken = refreshToken
         };
         return dto;
     }

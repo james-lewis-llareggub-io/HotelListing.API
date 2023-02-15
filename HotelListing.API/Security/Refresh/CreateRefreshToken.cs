@@ -5,12 +5,11 @@ namespace HotelListing.API.Security.Refresh;
 
 public class CreateRefreshToken : ICreateRefreshToken
 {
-    private readonly UserManager<IdentityUser> _userManager;
-
     public const string LoginProvider = "HotelListingAPI";
 
     public const string RefreshTokenName = "RefreshToken";
-        
+    private readonly UserManager<IdentityUser> _userManager;
+
     public CreateRefreshToken(UserManager<IdentityUser> userManager)
     {
         _userManager = userManager;

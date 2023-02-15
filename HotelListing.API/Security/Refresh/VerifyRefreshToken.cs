@@ -8,8 +8,8 @@ namespace HotelListing.API.Security.Refresh;
 
 public class VerifyRefreshToken : IVerifyRefreshToken
 {
-    private readonly UserManager<IdentityUser> _userManager;
     private readonly ICreatePostLogin _createPostLogin;
+    private readonly UserManager<IdentityUser> _userManager;
 
     public VerifyRefreshToken(
         UserManager<IdentityUser> userManager,
@@ -19,7 +19,7 @@ public class VerifyRefreshToken : IVerifyRefreshToken
         _userManager = userManager;
         _createPostLogin = createPostLogin;
     }
-        
+
     public async Task<PostLogin?> Verify(PostLogin dto)
     {
         var user = await GetIdentityUser(dto);
