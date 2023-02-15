@@ -1,4 +1,4 @@
-namespace HotelListing.API;
+namespace HotelListing.API.v1;
 
 public class WeatherForecast
 {

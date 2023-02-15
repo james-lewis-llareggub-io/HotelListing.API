@@ -1,4 +1,4 @@
-namespace HotelListing.API.Controllers;
+namespace HotelListing.API.v1.Controllers;
 
 [ApiController]
 [Route("[controller]")]

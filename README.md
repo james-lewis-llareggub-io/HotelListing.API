@@ -29,3 +29,27 @@ based on an udemy course available at https://www.udemy.com/course/ultimate-aspn
 ## Single Responsibility
 
 - add validation annotations (e.g. [Required]) to data transfer objects and not entity framework POCO
+
+# API versions
+
+## one console application per solution
+
+keep the project structure simple containing all of the code 
+
+use directories instead of projects
+
+### too big?
+
+if the project gets too big, consider splitting the service into more micro-services
+
+## legacy versions
+
+clone the main console application into a class library per version
+
+- add the class library as a reference to the single console application containing the current version 
+
+### [ApiVersion("x.0")] annotations
+
+apply controller level annotations to each versioned class library
+
+- do not apply controller level annotations to the main console application
