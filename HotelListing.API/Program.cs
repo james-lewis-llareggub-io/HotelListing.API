@@ -1,5 +1,6 @@
 using HotelListing.API.Contracts.Security;
 using HotelListing.API.Contracts.Security.Refresh;
+using HotelListing.API.Middleware;
 using HotelListing.API.Security;
 using HotelListing.API.Security.Refresh;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -85,6 +86,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseSerilogRequestLogging();
 
