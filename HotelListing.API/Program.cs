@@ -7,7 +7,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
+
+const string title = "HotelListing.API";
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +28,23 @@ builder.Services.AddIdentityCore<IdentityUser>()
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = title,
+        Version = "v1",
+        Description = "Initial draft (including WeatherForecast controller)"
+    });
+    options.SwaggerDoc("v2", new OpenApiInfo
+    {
+        Title = title,
+        Version = "v2",
+        Description = "Added url api versioning mechanism and deprecated WeatherForecast controller"
+    });
+    options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+    options.DocInclusionPredicate((docName, apiDesc) => apiDesc.GroupName == docName);
+});
 
 builder.Services.AddCors(options =>
 {
@@ -37,14 +56,9 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddApiVersioning(options =>
 {
-    options.AssumeDefaultVersionWhenUnspecified = true;
-    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.DefaultApiVersion = new ApiVersion(2, 0);
     options.ReportApiVersions = true;
-    options.ApiVersionReader = ApiVersionReader.Combine(
-        new QueryStringApiVersionReader("api-version"),
-        new HeaderApiVersionReader("X-Version"),
-        new MediaTypeApiVersionReader("ver")
-    );
+    options.ApiVersionReader = new UrlSegmentApiVersionReader();
 });
 
 builder.Services.AddVersionedApiExplorer(options =>
@@ -103,7 +117,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "V1");
+        options.SwaggerEndpoint("/swagger/v2/swagger.json", "V2");
+    });
 }
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();

@@ -2,9 +2,7 @@
 
 namespace HotelListing.API.Controllers.User;
 
-[Route("api/[controller]")]
-[ApiController]
-public class RefreshController : ControllerBase
+public class RefreshController : AbstractUserController
 {
     private readonly IVerifyRefreshToken _verifyRefreshToken;
 

@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace HotelListing.API.Controllers.User;
 
-[Route("api/[controller]")]
-[ApiController]
-public class LoginController : ControllerBase
+public class LoginController : AbstractUserController
 {
     private readonly ICreatePostLogin _createPostLogin;
     private readonly ICreateRefreshToken _createRefreshToken;

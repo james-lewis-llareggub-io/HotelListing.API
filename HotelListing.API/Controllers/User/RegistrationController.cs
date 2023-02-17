@@ -2,9 +2,7 @@
 
 namespace HotelListing.API.Controllers.User;
 
-[Route("api/[controller]")]
-[ApiController]
-public class RegistrationController : ControllerBase
+public class RegistrationController : AbstractUserController
 {
     private readonly ILogger<RegistrationController> _logger;
     private readonly IMapper _mapper;

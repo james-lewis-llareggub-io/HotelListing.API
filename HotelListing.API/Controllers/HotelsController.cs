@@ -1,7 +1,5 @@
 namespace HotelListing.API.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
 public class HotelsController : AbstractController<
     Hotel,
     GetHotel,

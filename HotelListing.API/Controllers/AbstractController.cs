@@ -1,5 +1,7 @@
 ﻿namespace HotelListing.API.Controllers;
 
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiController]
 public abstract class AbstractController<T, TGet, TGetDetail, TUpdate, TCreate> :
     ControllerBase,
     IController<T, TGet, TGetDetail, TUpdate, TCreate>

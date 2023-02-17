@@ -1,8 +1,8 @@
 namespace HotelListing.API.v1.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0", Deprecated = true)]
 public class WeatherForecastController : ControllerBase
 {
     private static readonly string[] Summaries =
