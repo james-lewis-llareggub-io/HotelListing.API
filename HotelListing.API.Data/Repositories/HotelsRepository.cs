@@ -1,4 +1,4 @@
-﻿namespace HotelListing.API.Repositories;
+﻿namespace HotelListing.API.Data.Repositories;
 
 public class HotelsRepository : Repository<Hotel>, IHotelsRepository
 {

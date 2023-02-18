@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace HotelListing.API.Configurations.Database;
+﻿namespace HotelListing.API.Data.Configuration;
 
 public class CountryConfiguration : IEntityTypeConfiguration<Country>
 {

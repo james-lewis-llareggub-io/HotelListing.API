@@ -1,7 +1,4 @@
-﻿using HotelListing.API.Configurations.Database;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
-namespace HotelListing.API.Data;
+﻿namespace HotelListing.API.Data;
 
 public class HotelListingDbContext : IdentityDbContext
 {

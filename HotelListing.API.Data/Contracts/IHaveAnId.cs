@@ -1,4 +1,4 @@
-﻿namespace HotelListing.API.Contracts;
+﻿namespace HotelListing.API.Data.Contracts;
 
 public interface IHaveAnId
 {

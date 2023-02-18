@@ -30,6 +30,37 @@ based on an udemy course available at https://www.udemy.com/course/ultimate-aspn
 
 - add validation annotations (e.g. [Required]) to data transfer objects and not entity framework POCO
 
+
+# response caching
+## enabled in Program.cs
+### add response caching to web application builder's servce
+    builder.Services.AddResponseCaching(options =>
+    {
+        options.MaximumBodySize = cacheSettings.MaximumSizeInMegabytes;
+        options.UseCaseSensitivePaths = true;
+    });
+
+### add middleware delegate to web application to add header information to response
+    app.UseResponseCaching();
+    
+    app.Use(async (context, next) =>
+    {
+        context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue()
+        {
+            Public = true,
+            MaxAge = TimeSpan.FromSeconds(cacheSettings.MaximumAgeInSeconds)
+        };
+        context.Response.Headers[HeaderNames.Vary] = new []{ "Accept-Encoding" };
+        await next();
+    });
+
+
+## configurable via appsettings.json
+    "Cache": {
+        "MaximumSizeInMegabytes": 1024,
+        "MaximumAgeInSeconds": 60
+    }
+
 # URL API versioning
 
 make calls to url based api version explicit from day one

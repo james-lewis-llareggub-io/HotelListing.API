@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace HotelListing.API.Configurations.Database;
+﻿namespace HotelListing.API.Data.Configuration;
 
 public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
 {

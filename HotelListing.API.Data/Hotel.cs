@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace HotelListing.API.Data;
+﻿namespace HotelListing.API.Data;
 
 public class Hotel : IHaveAnId
 {

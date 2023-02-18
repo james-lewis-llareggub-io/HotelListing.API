@@ -1,5 +1,6 @@
 using HotelListing.API.Contracts.Security;
 using HotelListing.API.Contracts.Security.Refresh;
+using HotelListing.API.Data.Repositories;
 using HotelListing.API.Middleware;
 using HotelListing.API.Security;
 using HotelListing.API.Security.Refresh;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -42,6 +44,12 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v2",
         Description = "Added url api versioning mechanism and deprecated WeatherForecast controller"
     });
+    options.SwaggerDoc("v2.1", new OpenApiInfo
+    {
+        Title = title,
+        Version = "v2.1",
+        Description = "Added response caching with configurable size and time app settings"
+    });
     options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
     options.DocInclusionPredicate((docName, apiDesc) => apiDesc.GroupName == docName);
 });
@@ -56,7 +64,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddApiVersioning(options =>
 {
-    options.DefaultApiVersion = new ApiVersion(2, 0);
+    options.DefaultApiVersion = new ApiVersion(2, 1);
     options.ReportApiVersions = true;
     options.ApiVersionReader = new UrlSegmentApiVersionReader();
 });
@@ -68,6 +76,7 @@ builder.Services.AddVersionedApiExplorer(options =>
 });
 
 builder.Services.AddAutoMapper(typeof(AutoMapperConfiguration));
+builder.Services.AddAutoMapper(typeof(HotelListing.API.v2.Configurations.AutoMapperConfiguration));
 
 builder.Services
     .AddScoped(typeof(IRepository<>), typeof(Repository<>))
@@ -83,6 +92,7 @@ builder.Services
 
 var provider = new SigningCredentialsProvider(builder.Configuration);
 var jwt = new JwtSettingsConfiguration(builder.Configuration);
+var cacheSettings = new CacheSettingsConfiguration(builder.Configuration);
 
 builder.Services.AddAuthentication(options =>
     {
@@ -104,6 +114,12 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
+builder.Services.AddResponseCaching(options =>
+{
+    options.MaximumBodySize = cacheSettings.MaximumSizeInMegabytes;
+    options.UseCaseSensitivePaths = true;
+});
+
 builder.Host.UseSerilog((context, configuration) =>
 {
     configuration
@@ -119,6 +135,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
+        options.SwaggerEndpoint("/swagger/v2.1/swagger.json", "V2.1");
         options.SwaggerEndpoint("/swagger/v2/swagger.json", "V2");
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "V1");
     });
@@ -131,6 +148,24 @@ app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
+
+app.UseResponseCaching();
+
+app.Use(async (context, next) =>
+{
+    var version = context.GetRequestedApiVersion();
+    if (version is { MajorVersion: >= 2, MinorVersion: >= 1 })
+    {
+        context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue
+        {
+            Public = true,
+            MaxAge = TimeSpan.FromSeconds(cacheSettings.MaximumAgeInSeconds)
+        };
+        context.Response.Headers[HeaderNames.Vary] = new[] { "Accept-Encoding" };
+    }
+
+    await next();
+});
 
 app.UseAuthentication();
 
