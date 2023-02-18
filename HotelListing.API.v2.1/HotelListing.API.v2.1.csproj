@@ -1,10 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <Nullable>enable</Nullable>
+        <RootNamespace>HotelListing.API.v2_1</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
-        <UserSecretsId>33188bf2-107d-4754-8906-5921934f6e63</UserSecretsId>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
@@ -29,9 +29,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\HotelListing.API.Data\HotelListing.API.Data.csproj"/>
-        <ProjectReference Include="..\HotelListing.API.v1\HotelListing.API.v1.csproj"/>
-        <ProjectReference Include="..\HotelListing.API.v2.1\HotelListing.API.v2.1.csproj"/>
-        <ProjectReference Include="..\HotelListing.API.v2\HotelListing.API.v2.csproj"/>
     </ItemGroup>
 
 </Project>

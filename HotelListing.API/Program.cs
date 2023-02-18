@@ -7,6 +7,7 @@ using HotelListing.API.Security.Refresh;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.OData;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
@@ -27,7 +28,6 @@ builder.Services.AddIdentityCore<IdentityUser>()
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<HotelListingDbContext>();
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -42,13 +42,19 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = title,
         Version = "v2",
-        Description = "Added url api versioning mechanism and deprecated WeatherForecast controller"
+        Description = "Url api versioning mechanism (deprecated WeatherForecast controller)"
     });
     options.SwaggerDoc("v2.1", new OpenApiInfo
     {
         Title = title,
         Version = "v2.1",
-        Description = "Added response caching with configurable size and time app settings"
+        Description = "Response caching with configurable size and time app settings"
+    });
+    options.SwaggerDoc("v2.2", new OpenApiInfo
+    {
+        Title = title,
+        Version = "v2.2",
+        Description = "OData data access protocol for get all methods"
     });
     options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
     options.DocInclusionPredicate((docName, apiDesc) => apiDesc.GroupName == docName);
@@ -64,7 +70,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddApiVersioning(options =>
 {
-    options.DefaultApiVersion = new ApiVersion(2, 1);
+    options.DefaultApiVersion = new ApiVersion(2, 2);
     options.ReportApiVersions = true;
     options.ApiVersionReader = new UrlSegmentApiVersionReader();
 });
@@ -77,6 +83,7 @@ builder.Services.AddVersionedApiExplorer(options =>
 
 builder.Services.AddAutoMapper(typeof(AutoMapperConfiguration));
 builder.Services.AddAutoMapper(typeof(HotelListing.API.v2.Configurations.AutoMapperConfiguration));
+builder.Services.AddAutoMapper(typeof(HotelListing.API.v2_1.Configurations.AutoMapperConfiguration));
 
 builder.Services
     .AddScoped(typeof(IRepository<>), typeof(Repository<>))
@@ -127,6 +134,20 @@ builder.Host.UseSerilog((context, configuration) =>
         .ReadFrom.Configuration(context.Configuration);
 });
 
+builder.Services
+    .AddControllers()
+    .AddOData(options =>
+    {
+        options
+            .Select()
+            .Filter()
+            .OrderBy()
+            .Count()
+            .SkipToken()
+            .SetMaxTop(10)
+            .Expand();
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -135,6 +156,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
+        options.SwaggerEndpoint("/swagger/v2.2/swagger.json", "V2.2");
         options.SwaggerEndpoint("/swagger/v2.1/swagger.json", "V2.1");
         options.SwaggerEndpoint("/swagger/v2/swagger.json", "V2");
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "V1");

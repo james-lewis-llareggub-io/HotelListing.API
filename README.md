@@ -61,6 +61,33 @@ based on an udemy course available at https://www.udemy.com/course/ultimate-aspn
         "MaximumAgeInSeconds": 60
     }
 
+# OData (Open Data Protocol)
+
+https://learn.microsoft.com/en-us/odata/overview
+
+introduced in api version v2.2 
+
+## select example
+
+retrieve only the name property from a list of all hotels
+
+https://localhost:7076/api/v2.2/Hotels?$select=name
+
+    [
+      {
+        "Name": "Sandals Resort and Spa"
+      },
+      {
+        "Name": "Comfort Suites"
+      },
+
+## query documentation
+
+https://learn.microsoft.com/en-us/aspnet/web-api/overview/odata-support-in-aspnet-web-api/supporting-odata-query-options
+
+https://learn.microsoft.com/en-us/odata/concepts/queryoptions-usage?source=recommendations#top--skip
+
+
 # URL API versioning
 
 make calls to url based api version explicit from day one

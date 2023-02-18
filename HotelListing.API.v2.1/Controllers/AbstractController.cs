@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.OData.Query;
+﻿namespace HotelListing.API.v2_1.Controllers;
 
-namespace HotelListing.API.Controllers;
-
-[Route("api/v{version:apiVersion}/[controller]")]
+[Route("api/v2.1/[controller]")]
 [ApiController]
 public abstract class AbstractController<T, TGet, TGetDetail, TUpdate, TCreate> :
     ControllerBase,
@@ -24,7 +22,6 @@ public abstract class AbstractController<T, TGet, TGetDetail, TUpdate, TCreate> 
 
     // GET: api/Countries
     [HttpGet]
-    [EnableQuery]
     public async Task<ActionResult<IEnumerable<TGet>>> GetAll()
     {
         var entities = await _repository.GetAllAsync();
