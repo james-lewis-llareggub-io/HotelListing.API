@@ -4,6 +4,8 @@
 name: .NET initial github action to build and test solution
 
 on:
+  push:
+    branches: ["*"]
   pull_request:
     branches: [ "main" ]
 
